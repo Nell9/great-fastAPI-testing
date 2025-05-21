@@ -1,22 +1,12 @@
-import uvicorn
-
 from fastapi import FastAPI
+
 from fastapi.responses import FileResponse
 from pathlib import Path
 
-
 BASE_DIR = Path(__file__).resolve().parent
-
 calculate = FastAPI()
+
 
 @calculate.get("/calculate", response_class=FileResponse)
 async def root():
-    return BASE_DIR / 'templates' / 'calculate' / 'index.html'
-
-
-
-if __name__ == '__main__':
-    uvicorn.run(calculate,
-                host='127.0.0.1',
-                port=81,
-                reload=True)
+    return BASE_DIR / 'templates' / 'home' / 'index.html'
