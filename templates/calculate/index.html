@@ -1,18 +1,26 @@
 <!DOCTYPE html>
-
 <html lang="ru">
-    <head>
-        <meta charset="UTF-8">
-        <title> Пример простой страницы html</title>
-    </head>
-    <body>
-        <form action="/submit" method="post">
-            <label for="user_text">Текст:</label>
-            <input type="text" id="user_text" name="user_text" required>
-            <button type="submit">Отправить</button>
-        </form>
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <title>Калькулятор</title>
+</head>
+<body>
+    <form action="/" method="post">
+        <label for="num1">Число 1:</label>
+        <input type="number" step="any" id="num1" name="num1" required>
+
+        <label for="num2">Число 2:</label>
+        <input type="number" step="any" id="num2" name="num2" required>
+
+        <button type="submit">Сложить</button>
+    </form>
+
+    {% if result is not none %}
+        <h2>Результат: {{ result }}</h2>
+    {% endif %}
+
     <footer>
         Подвальчик казино
     </footer>
+</body>
 </html>

@@ -1,22 +1,29 @@
-import uvicorn
-
-from fastapi import FastAPI
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, Request, Form, Depends
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from pydantic import BaseModel
 from pathlib import Path
 
-
 BASE_DIR = Path(__file__).resolve().parent
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates/calculate"))
 
-calculate = FastAPI()
-
-@calculate.get("/calculate", response_class=FileResponse)
-async def root():
-    return BASE_DIR / 'templates' / 'calculate' / 'index.html'
+app = FastAPI()
 
 
+@app.get("/", response_class=HTMLResponse)
+def calc_form(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request, "result": None})
 
-if __name__ == '__main__':
-    uvicorn.run(calculate,
-                host='127.0.0.1',
-                port=81,
-                reload=True)
+
+class Numbers(BaseModel):
+    num1: float
+    num2: float
+
+
+def form_to_model(num1: float = Form(...), num2: float = Form(...)) -> Numbers:
+    return Numbers(num1=num1, num2=num2)
+
+
+@app.post("/", response_class=HTMLResponse)
+def calc(request: Request, data: Numbers = Depends(form_to_model)):
+    return templates.TemplateResponse("index.html", {"request": request, "sum": data.num1 + data.num2})
